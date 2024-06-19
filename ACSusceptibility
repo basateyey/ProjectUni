@@ -1,0 +1,35 @@
+import matplotlib.pyplot as plt
+import pandas as pd
+import math
+
+# Read the data from the file, skipping the first 21 rows
+data = pd.read_csv('PPMS_Li0.6Al0.4Fe5O8 Xac.dat', skiprows=21)
+
+# Group the data by 'Wave Frequency (Hz)'
+grouped_data = data.groupby('Frequency (Hz)')
+
+data['Mdoublebar (emu)'] = data['Mdoublebar (emu)'] / 0.08526
+
+# Create a figure and axis for plotting
+fig, ax = plt.subplots()
+
+# Plot each group
+for frequency, group in grouped_data:
+    # Round up the frequency to the nearest whole number
+    frequency_label = math.ceil(frequency)
+    ax.plot(group['Temperature (K)'], group['Mdoublebar (emu)'], label=round(frequency_label))
+
+
+
+# Label the axes
+ax.set_xlabel('Temperature (K)')
+ax.set_ylabel('Magnetic Moment (emu)')
+
+# Add a title
+ax.set_title('Magnetic Properties by Wave Frequency')
+
+# Show the legend
+plt.legend(bbox_to_anchor=(1.03, 1.0), loc='upper left')
+
+# Display the plot
+plt.show()
